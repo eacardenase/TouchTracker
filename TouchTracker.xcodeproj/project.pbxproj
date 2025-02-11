@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A54B82042D5C13CF00D832F7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A54B82032D5C13CF00D832F7 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		A54B81E62D5C13B900D832F7 /* TouchTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TouchTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A54B82032D5C13CF00D832F7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +50,7 @@
 		A54B81DD2D5C13B900D832F7 = {
 			isa = PBXGroup;
 			children = (
+				A54B82032D5C13CF00D832F7 /* README.md */,
 				A54B81E82D5C13B900D832F7 /* TouchTracker */,
 				A54B81E72D5C13B900D832F7 /* Products */,
 			);
@@ -121,6 +127,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A54B82042D5C13CF00D832F7 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
