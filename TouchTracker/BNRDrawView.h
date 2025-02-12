@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  BNRDrawView.h
 //  TouchTracker
 //
 //  Created by Edwin Cardenas on 11/02/25.
@@ -7,8 +7,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+NS_ASSUME_NONNULL_BEGIN
 
+@interface BNRDrawView : UIView
 
 @end
 
+NS_ASSUME_NONNULL_END
