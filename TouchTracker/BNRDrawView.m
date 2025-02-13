@@ -107,5 +107,17 @@
     [self setNeedsDisplay];
 }
 
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"Message sent: %@", NSStringFromSelector(_cmd));
+    
+    for (UITouch *touch in touches) {
+        NSValue *key = [NSValue valueWithNonretainedObject:touch];
+        [self.linesInProgress removeObjectForKey:key];
+    }
+    
+    [self setNeedsDisplay];
+}
+
 
 @end
