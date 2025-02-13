@@ -12,6 +12,7 @@
 
 @property (nonatomic) NSMutableDictionary<NSValue *, BNRLine *> *linesInProgress;
 @property (nonatomic) NSMutableArray<BNRLine *> *finishedLines;
+@property (nonatomic, weak) BNRLine * _Nullable selectedLine;
 
 @end
 
@@ -32,6 +33,12 @@
         doubleTapRecognizer.delaysTouchesBegan = YES;
         
         [self addGestureRecognizer:doubleTapRecognizer];
+        
+        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+                                                 initWithTarget:self action:@selector(tap:)];
+        [tapRecognizer requireGestureRecognizerToFail:doubleTapRecognizer];
+        
+        [self addGestureRecognizer:tapRecognizer];
     }
     
     return self;
@@ -61,6 +68,30 @@
     for (NSValue *key in self.linesInProgress) {
         [self strokeLine:self.linesInProgress[key]];
     }
+    
+    if (self.selectedLine) {
+        [[UIColor greenColor] set];
+        [self strokeLine:self.selectedLine];
+    }
+}
+
+- (BNRLine * _Nullable)lineAtPoint:(CGPoint)point
+{
+    for (BNRLine *line in self.finishedLines) {
+        CGPoint start = line.begin;
+        CGPoint end = line.end;
+        
+        for (float t = 0.0; t < 1.0; t += 0.05) {
+            float x = start.x + t * (end.x - start.x);
+            float y = start.y + t * (end.y - start.y);
+            
+            if (hypot(x - point.x, y - point.y) < 20.0) {
+                return line;
+            }
+        }
+    }
+    
+    return nil;
 }
 
 #pragma mark - UIResponder
@@ -134,6 +165,16 @@
     
     [self.linesInProgress removeAllObjects];
     [self.finishedLines removeAllObjects];
+    [self setNeedsDisplay];
+}
+
+- (void)tap:(UIGestureRecognizer *)gesture
+{
+    NSLog(@"Recognized tap");
+    
+    CGPoint point = [gesture locationInView:self];
+    self.selectedLine = [self lineAtPoint:point];
+    
     [self setNeedsDisplay];
 }
 
