@@ -188,12 +188,9 @@
                                                             action:@selector(deleteLine:)];
         menu.menuItems = @[deleteItem];
         
-        [menu setTargetRect:CGRectMake(point.x, point.y, 2, 2)
-                     inView:self];
-        [menu setMenuVisible:YES animated:YES];
+        [menu showMenuFromView:self rect:CGRectMake(point.x, point.y, 2, 2)];
     } else {
-        [[UIMenuController sharedMenuController] setMenuVisible:NO
-                                                       animated:YES];
+        [[UIMenuController sharedMenuController] hideMenuFromView:self];
     }
     
     [self setNeedsDisplay];
