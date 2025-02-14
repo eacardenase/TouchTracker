@@ -85,7 +85,7 @@
             float x = start.x + t * (end.x - start.x);
             float y = start.y + t * (end.y - start.y);
             
-            if (hypot(x - point.x, y - point.y) < 20.0) {
+            if (hypot(x - point.x, y - point.y) < 10.0) {
                 return line;
             }
         }
@@ -157,6 +157,11 @@
     [self setNeedsDisplay];
 }
 
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
 #pragma mark - Actions
 
 - (void)doubleTap:(UIGestureRecognizer *)gesture
@@ -174,6 +179,29 @@
     
     CGPoint point = [gesture locationInView:self];
     self.selectedLine = [self lineAtPoint:point];
+    
+    if (self.selectedLine) {
+        [self becomeFirstResponder];
+        
+        UIMenuController *menu = [UIMenuController sharedMenuController];
+        UIMenuItem *deleteItem = [[UIMenuItem alloc] initWithTitle:@"Delete"
+                                                            action:@selector(deleteLine:)];
+        menu.menuItems = @[deleteItem];
+        
+        [menu setTargetRect:CGRectMake(point.x, point.y, 2, 2)
+                     inView:self];
+        [menu setMenuVisible:YES animated:YES];
+    } else {
+        [[UIMenuController sharedMenuController] setMenuVisible:NO
+                                                       animated:YES];
+    }
+    
+    [self setNeedsDisplay];
+}
+
+- (void)delete:(id)sender
+{
+    [self.finishedLines removeObject:self.selectedLine];
     
     [self setNeedsDisplay];
 }
