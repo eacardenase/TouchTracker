@@ -8,11 +8,12 @@
 #import "BNRDrawView.h"
 #import "BNRLine.h"
 
-@interface BNRDrawView ()
+@interface BNRDrawView () <UIGestureRecognizerDelegate>
 
 @property (nonatomic) NSMutableDictionary<NSValue *, BNRLine *> *linesInProgress;
 @property (nonatomic) NSMutableArray<BNRLine *> *finishedLines;
 @property (nonatomic, weak) BNRLine * _Nullable selectedLine;
+@property (nonatomic) UIPanGestureRecognizer *panRecognizer;
 
 @end
 
@@ -43,6 +44,13 @@
         UILongPressGestureRecognizer *pressRecognizer = [[UILongPressGestureRecognizer alloc]
                                                          initWithTarget:self action:@selector(longPress:)];
         [self addGestureRecognizer:pressRecognizer];
+        
+        self.panRecognizer = [[UIPanGestureRecognizer alloc]
+                              initWithTarget:self action:@selector(moveLine:)];
+        self.panRecognizer.delegate = self;
+        self.panRecognizer.cancelsTouchesInView = NO;
+        
+        [self addGestureRecognizer:self.panRecognizer];
     }
     
     return self;
@@ -166,6 +174,17 @@
     return YES;
 }
 
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    if (gestureRecognizer == self.panRecognizer) {
+        return YES;
+    }
+    
+    return NO;
+}
+
 #pragma mark - Actions
 
 - (void)doubleTap:(UIGestureRecognizer *)gesture
@@ -221,6 +240,31 @@
     }
     
     [self setNeedsDisplay];
+}
+
+- (void)moveLine:(UIPanGestureRecognizer *)gesture
+{
+    if (!self.selectedLine) {
+        return;
+    }
+    
+    if (gesture.state == UIGestureRecognizerStateChanged) {
+        CGPoint translation = [gesture translationInView:self];
+        CGPoint begin = self.selectedLine.begin;
+        CGPoint end = self.selectedLine.end;
+        
+        begin.x += translation.x;
+        begin.y += translation.y;
+        end.x += translation.x;
+        end.y += translation.y;
+        
+        self.selectedLine.begin = begin;
+        self.selectedLine.end = end;
+        
+        [self setNeedsDisplay];
+        
+        [gesture setTranslation:CGPointZero inView:self];
+    }
 }
 
 
