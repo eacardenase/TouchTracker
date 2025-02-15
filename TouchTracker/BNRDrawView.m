@@ -196,7 +196,7 @@
     [self setNeedsDisplay];
 }
 
-- (void)delete:(id)sender
+- (void)deleteLine:(id)sender
 {
     [self.finishedLines removeObject:self.selectedLine];
     
