@@ -24,6 +24,11 @@
     self.window.rootViewController = [[BNRDrawViewController alloc] init];
     
     [self.window makeKeyAndVisible];
+    
+#ifdef VIEW_DEBUG
+    NSLog(@"%@", [self.window performSelector:@selector(recursiveDescription)]);
+#endif
+    
 }
 
 
